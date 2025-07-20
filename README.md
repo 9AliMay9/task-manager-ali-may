@@ -51,7 +51,7 @@ pdm run uvicorn main:app --reload
 ## 🧱 Roadmap
 Add basic token-based auth (non-OAuth2) √
 
-Switch to PostgreSQL
+Switch to PostgreSQL √
 
 Add OAuth2 + JWT support
 
