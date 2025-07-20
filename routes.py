@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Security
 from sqlalchemy.orm import Session
 
+from auth import get_api_key
 from database import get_db
 from models import Task
 from schemas import TaskCreate, TaskOut, TaskUpdate
@@ -10,7 +11,7 @@ import crud
 router = APIRouter()
 
 
-@router.post("/tasks/", response_model=TaskOut)
+@router.post("/", response_model=TaskOut)
 def create_task(task_data: TaskCreate, db: Session = Depends(get_db)):
     """
     Create a new task.
@@ -18,15 +19,15 @@ def create_task(task_data: TaskCreate, db: Session = Depends(get_db)):
     return crud.create_task(db, task_data)
 
 
-@router.get("/tasks/", response_model=list[TaskOut])
-def read_all_tasks(db: Session = Depends(get_db)):
+@router.get("/", response_model=list[TaskOut])
+def read_all_tasks(db: Session = Depends(get_db), api_key: str = Security(get_api_key)):
     """
     Retrieve all tasks.
     """
     return crud.get_all_tasks(db)
 
 
-@router.get("/tasks/{task_id}", response_model=TaskOut)
+@router.get("/{task_id}", response_model=TaskOut)
 def read_task(task_id: int, db: Session = Depends(get_db)):
     """
     Retrieve a task by ID.
@@ -37,7 +38,7 @@ def read_task(task_id: int, db: Session = Depends(get_db)):
     return task
 
 
-@router.put("/tasks/{task_id}", response_model=TaskOut)
+@router.put("/{task_id}", response_model=TaskOut)
 def update_task(task_id: int, task_data: TaskUpdate, db: Session = Depends(get_db)):
     """
     Update an existing task by ID.
@@ -48,8 +49,8 @@ def update_task(task_id: int, task_data: TaskUpdate, db: Session = Depends(get_d
     return updated_task
 
 
-@router.delete("/tasks/{task_id}", response_model=dict)
-def delete_task(task_id: int, db: Session = Depends(get_db)):
+@router.delete("/{task_id}", response_model=dict)
+def delete_task(task_id: int, db: Session = Depends(get_db), api_key: str = Security(get_api_key)):
     """
     Delete a task by ID.
     """
