@@ -49,7 +49,7 @@ pdm install
 pdm run uvicorn main:app --reload
 ```
 ## 🧱 Roadmap
-Add basic token-based auth (non-OAuth2)
+Add basic token-based auth (non-OAuth2) √
 
 Switch to PostgreSQL
 
