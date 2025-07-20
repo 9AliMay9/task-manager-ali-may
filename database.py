@@ -3,8 +3,11 @@ from sqlalchemy.orm import sessionmaker
 from config import settings
 
 
+SQLALCHEMY_DATABASE_URL = settings.database_url
+
+
 # Create SQLAlchemy engine using the database URL from config
-engine = create_engine(settings.database_url, connect_args={"check_same_thread": False})
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
 
 # Create a configured "Session" class

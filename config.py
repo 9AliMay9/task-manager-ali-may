@@ -2,10 +2,14 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    app_name: str = "Task Manager API"         # Application name
-    debug: bool = True                         # Enable debug mode
-    database_url: str = "sqlite:///./task.db"  # Default to SQLite local file database
+    # Application name
+    app_name: str = "Task Manager API"
 
+    # Enable debug mode
+    debug: bool = True
+
+    # Default to PostgreSQL local file database
+    database_url: str
 
     class Config:
         env_file = ".env"  # Load variables from .env file if it exists
