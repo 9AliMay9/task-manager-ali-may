@@ -8,10 +8,10 @@ def create_task(db: Session, task_data: TaskCreate) -> Task:
     Create a new task in the database.
     """
     new_task = Task(
-            title=task_data.title,
-            description=task_data.description,
-            completed=task_data.completed,
-    )
+        title=task_data.title,
+        description=task_data.description,
+        completed=task_data.completed,
+        )
     db.add(new_task)
     db.commit()
     db.refresh(new_task)

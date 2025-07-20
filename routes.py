@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, Security
 from sqlalchemy.orm import Session
-
 from auth import get_api_key
 from database import get_db
 from models import Task
