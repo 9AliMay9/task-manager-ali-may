@@ -4,9 +4,7 @@ from schemas import TaskCreate, TaskUpdate
 
 
 def create_task(db: Session, task_data: TaskCreate) -> Task:
-    """
-    Create a new task in the database.
-    """
+    """Create and persist a new task."""
     new_task = Task(
         title=task_data.title,
         description=task_data.description,
@@ -19,23 +17,17 @@ def create_task(db: Session, task_data: TaskCreate) -> Task:
 
 
 def get_task_by_id(db: Session, task_id: int) -> Task | None:
-    """
-    Retrieve a task by its ID.
-    """
+    """Get a task by its ID."""
     return db.query(Task).filter(Task.id == task_id).first()
 
 
 def get_all_tasks(db: Session) -> list[Task]:
-    """
-    Retrieve all tasks from the database.
-    """
+    """Get all Tasks."""
     return db.query(Task).all()
 
 
 def update_task(db: Session, task_id: int, task_data: TaskUpdate) -> Task | None:
-    """
-    Update an existing task by its ID.
-    """
+    """Update Task fields identified by ID."""
     task = db.query(Task).filter(Task.id == task_id).first()
     if not task:
         return None
@@ -48,9 +40,7 @@ def update_task(db: Session, task_id: int, task_data: TaskUpdate) -> Task | None
 
 
 def delete_task_by_id(db: Session, task_id: int) -> bool:
-    """
-    Delete a task by its ID.
-    """
+    """Delete Task by ID; return success status."""
     task = db.query(Task).filter(Task.id == task_id).first()
     if not task:
         return False

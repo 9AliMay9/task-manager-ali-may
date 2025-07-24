@@ -1,13 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException, Security
 from sqlalchemy.orm import Session
-from auth import get_api_key
 from database import get_db
 from models import Task
 from schemas import TaskCreate, TaskOut, TaskUpdate
+from auth import require_permission
 import crud
 
 
-router = APIRouter()
+router = APIRouter(tags=["Tasks"])
 
 
 @router.post("/", response_model=TaskOut)
@@ -19,9 +19,13 @@ def create_task(task_data: TaskCreate, db: Session = Depends(get_db)):
 
 
 @router.get("/", response_model=list[TaskOut])
-def read_all_tasks(db: Session = Depends(get_db), api_key: str = Security(get_api_key)):
+def read_all_tasks(
+        db: Session = Depends(get_db),
+        _: dict = Security(require_permission(["read"])),
+):
     """
-    Retrieve all tasks.
+    Get all tasks.
+    Requires JWT token with 'read' permission.
     """
     return crud.get_all_tasks(db)
 
@@ -29,7 +33,8 @@ def read_all_tasks(db: Session = Depends(get_db), api_key: str = Security(get_ap
 @router.get("/{task_id}", response_model=TaskOut)
 def read_task(task_id: int, db: Session = Depends(get_db)):
     """
-    Retrieve a task by ID.
+    Get a task by its ID.
+    Raises 404 if the task does not exist.
     """
     task = crud.get_task_by_id(db, task_id)
     if not task:
@@ -40,7 +45,7 @@ def read_task(task_id: int, db: Session = Depends(get_db)):
 @router.put("/{task_id}", response_model=TaskOut)
 def update_task(task_id: int, task_data: TaskUpdate, db: Session = Depends(get_db)):
     """
-    Update an existing task by ID.
+    Update a task by its ID.
     """
     updated_task = crud.update_task(db, task_id, task_data)
     if not updated_task:
@@ -49,9 +54,14 @@ def update_task(task_id: int, task_data: TaskUpdate, db: Session = Depends(get_d
 
 
 @router.delete("/{task_id}", response_model=dict)
-def delete_task(task_id: int, db: Session = Depends(get_db), api_key: str = Security(get_api_key)):
+def delete_task(
+        task_id: int,
+        db: Session = Depends(get_db),
+        _: dict = Security(require_permission(["delete"])),
+):
     """
-    Delete a task by ID.
+    Delete a task by its ID.
+    Requires JWT token with 'delete' permission.
     """
     success = crud.delete_task_by_id(db, task_id)
     if not success:

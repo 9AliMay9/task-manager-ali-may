@@ -32,9 +32,9 @@ class TaskOut(TaskBase):
     """
     Schema used when returning a task from the API.
     """
-    id: int                     # Unique task ID
-    created_at: datetime        # Creation timestamp
-    update_at: datetime         # Last update timestamp
+    id: int                                 # Unique task ID
+    created_at: datetime                    # Creation timestamp
+    updated_at: Optional[datetime] = None   # Last update timestamp
 
 
     class Config:

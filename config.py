@@ -2,18 +2,13 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    # Application name
-    app_name: str = "Task Manager API"
-
-    # Enable debug mode
-    debug: bool = True
-
-    # Default to PostgreSQL local file database
-    database_url: str
+    app_name: str = "Task Manager API"  # Application name
+    debug: bool = True  # Debug mode enabled
+    database_url: str  # Database connection URL
+    secret_key: str  # JWT signing secret key
 
     class Config:
-        env_file = ".env"  # Load variables from .env file if it exists
+        env_file = ".env"  # Load environment variables from .env file
 
 
-# Instantiate the settings object for global config access
 settings = Settings()
